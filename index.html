@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Firebase SDK (compat version for easy use) -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -34,7 +34,6 @@
           <span class="material-icons text-indigo-600 text-3xl">local_library</span>
           <span class="font-bold text-xl text-gray-800">Perpustakaan<span class="text-indigo-600">Digital</span></span>
         </a>
-        <!-- Desktop Menu -->
         <div class="hidden md:flex items-center space-x-4" id="nav-links">
           <a href="#home" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">
             <span class="material-icons text-sm mr-1">home</span> Beranda
@@ -44,7 +43,6 @@
           </a>
           <div id="nav-auth-links"></div>
         </div>
-        <!-- Mobile Menu Button -->
         <div class="md:hidden flex items-center">
           <button onclick="toggleMobileMenu()" class="p-2 text-gray-700 hover:text-indigo-600">
             <span class="material-icons" id="mobile-menu-icon">menu</span>
@@ -52,7 +50,6 @@
         </div>
       </div>
     </div>
-    <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg">
       <div class="px-4 py-3 space-y-2" id="mobile-nav-links"></div>
     </div>
@@ -61,9 +58,68 @@
   <!-- ============ MAIN CONTENT ============ -->
   <main class="flex-1">
 
+    <!-- ======== SETUP PAGE ======== -->
+    <div id="page-setup" class="page">
+      <div class="min-h-[80vh] flex items-center justify-center py-12 px-4 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <div class="max-w-md w-full">
+          <div class="text-center mb-8">
+            <span class="material-icons text-indigo-600 text-6xl mb-4">admin_panel_settings</span>
+            <h2 class="text-3xl font-bold text-gray-800">Setup Admin Pertama</h2>
+            <p class="text-gray-500 mt-2">Buat akun admin untuk mengelola perpustakaan</p>
+          </div>
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <div id="setup-error" class="hidden mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center text-red-700 text-sm">
+              <span class="material-icons text-sm mr-2">error</span>
+              <span id="setup-error-text"></span>
+            </div>
+            <form onsubmit="handleSetup(event)" class="space-y-5">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">person</span>
+                  <input type="text" id="setup-name" required placeholder="Nama admin" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">mail</span>
+                  <input type="email" id="setup-email" required placeholder="admin@email.com" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">lock</span>
+                  <input type="password" id="setup-password" required placeholder="Minimal 8 karakter" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password</label>
+                <div class="relative">
+                  <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">lock</span>
+                  <input type="password" id="setup-confirm" required placeholder="Ulangi password" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+              </div>
+              <button type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-semibold flex items-center justify-center">
+                <span class="material-icons text-sm mr-2">admin_panel_settings</span> Buat Admin
+              </button>
+            </form>
+          </div>
+          <div class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <p class="text-sm font-medium text-blue-800 mb-2 flex items-center"><span class="material-icons text-sm mr-1">info</span> Penting:</p>
+            <div class="text-xs text-blue-700 space-y-1">
+              <p>• Simpan email dan password ini dengan baik</p>
+              <p>• Anda tidak bisa membuat admin kedua dari halaman ini</p>
+              <p>• Admin pertama bisa menambahkan admin lain dari dashboard</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ======== HOME PAGE ======== -->
     <div id="page-home" class="page">
-      <!-- Hero -->
       <section class="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white overflow-hidden">
         <div class="absolute inset-0 opacity-10">
           <div class="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
@@ -80,7 +136,6 @@
             <p class="text-lg md:text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
               Jelajahi ribuan koleksi buku perpustakaan secara digital. Cari, pinjam, dan kelola peminjaman buku dengan mudah.
             </p>
-            <!-- Search Box -->
             <form onsubmit="handleHomeSearch(event)" class="bg-white rounded-2xl shadow-2xl p-3 md:p-4 max-w-2xl mx-auto">
               <div class="flex flex-col md:flex-row gap-3">
                 <div class="flex-1 relative">
@@ -109,14 +164,12 @@
         </div>
       </section>
 
-      <!-- Stats -->
       <section class="py-12 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="home-stats"></div>
         </div>
       </section>
 
-      <!-- Recent Books -->
       <section class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between mb-8">
@@ -132,7 +185,6 @@
         </div>
       </section>
 
-      <!-- Categories -->
       <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-10">
@@ -168,7 +220,6 @@
         </div>
       </section>
 
-      <!-- CTA -->
       <section class="py-16 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
         <div class="max-w-4xl mx-auto px-4 text-center">
           <h2 class="text-3xl font-bold mb-4">Jadi Anggota Perpustakaan</h2>
@@ -276,13 +327,6 @@
               <p class="text-gray-500 text-sm">Belum punya akun? <a href="#register" class="text-indigo-600 font-medium hover:text-indigo-800">Daftar di sini</a></p>
             </div>
           </div>
-          <div class="mt-6 bg-indigo-50 border border-indigo-100 rounded-xl p-4">
-            <p class="text-sm font-medium text-indigo-800 mb-2 flex items-center"><span class="material-icons text-sm mr-1">info</span> Akun Demo:</p>
-            <div class="text-xs text-indigo-700 space-y-1">
-              <p><strong>Admin:</strong> admin@perpustakaan.id / admin123</p>
-              <p><strong>Anggota:</strong> Daftar akun baru melalui halaman registrasi</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -320,7 +364,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <div class="relative">
                   <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">lock</span>
-                  <input type="password" id="register-password" required placeholder="Minimal 6 karakter" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <input type="password" id="register-password" required placeholder="Minimal 8 karakter" class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
               </div>
               <div>
@@ -342,6 +386,20 @@
       </div>
     </div>
 
+    <!-- ======== PROFILE PAGE ======== -->
+    <div id="page-profile" class="page">
+      <div class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8" id="profile-content"></div>
+      </div>
+    </div>
+
+    <!-- ======== MY BOOKS PAGE ======== -->
+    <div id="page-my-books" class="page">
+      <div class="min-h-screen bg-gray-50 py-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" id="my-books-content"></div>
+      </div>
+    </div>
+
     <!-- ======== ADMIN DASHBOARD ======== -->
     <div id="page-admin" class="page">
       <div class="min-h-screen bg-gray-50 py-8">
@@ -359,6 +417,9 @@
               </a>
               <a href="#admin-loans" class="inline-flex items-center px-4 py-2 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm">
                 <span class="material-icons text-sm mr-1">swap_horiz</span> Peminjaman
+              </a>
+              <a href="#admin-borrowers" class="inline-flex items-center px-4 py-2 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm">
+                <span class="material-icons text-sm mr-1">people</span> Peminjam
               </a>
             </div>
           </div>
@@ -485,10 +546,23 @@
       </div>
     </div>
 
-    <!-- ======== MEMBER DASHBOARD ======== -->
-    <div id="page-member" class="page">
+    <!-- ======== ADMIN BORROWERS ======== -->
+    <div id="page-admin-borrowers" class="page">
       <div class="min-h-screen bg-gray-50 py-8">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" id="member-content"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+                <span class="material-icons text-indigo-600 mr-2">people</span> Daftar Peminjam
+              </h1>
+              <p class="text-gray-500 mt-1">Lihat siapa yang meminjam buku apa</p>
+            </div>
+            <a href="#admin" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm">
+              <span class="material-icons text-sm mr-1">arrow_back</span> Kembali
+            </a>
+          </div>
+          <div id="borrowers-content"></div>
+        </div>
       </div>
     </div>
 
@@ -537,49 +611,13 @@
     </div>
   </footer>
 
-  <!-- Vite entry (empty, for build compatibility) -->
   <script type="module" src="/src/main.tsx"></script>
 
-  <!-- ============ APPLICATION LOGIC ============ -->
   <script>
     // ==========================================
-    // DATA & STATE MANAGEMENT
-    // ==========================================
-    
-    const DEFAULT_BOOKS = [
-      { id:'1', title:'Laskar Pelangi', author:'Andrea Hirata', isbn:'978-979-3062-79-5', publisher:'Bentang Pustaka', year:2005, category:'Novel', description:'Novel yang mengisahkan kehidupan 10 anak dari keluarga miskin di Belitung yang bersekolah di SD Muhammadiyah. Kisah inspiratif tentang perjuangan mengejar pendidikan dan mimpi di tengah keterbatasan.', coverUrl:'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop', totalCopies:5, availableCopies:3, location:'Rak A-01', addedDate:'2024-01-15' },
-      { id:'2', title:'Bumi Manusia', author:'Pramoedya Ananta Toer', isbn:'978-979-9023-00-8', publisher:'Hasta Mitra', year:1980, category:'Novel', description:'Novel pertama dari Tetralogi Buru yang mengisahkan Minke, seorang pribumi yang mendapat pendidikan Eropa di masa kolonial Belanda.', coverUrl:'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop', totalCopies:4, availableCopies:2, location:'Rak A-02', addedDate:'2024-01-20' },
-      { id:'3', title:'Filosofi Teras', author:'Henry Manampiring', isbn:'978-602-291-567-8', publisher:'Kompas', year:2018, category:'Self-Help', description:'Buku yang memperkenalkan filsafat Stoa kepada pembaca Indonesia dengan bahasa yang ringan dan mudah dipahami.', coverUrl:'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=400&fit=crop', totalCopies:6, availableCopies:4, location:'Rak B-01', addedDate:'2024-02-01' },
-      { id:'4', title:'Atomic Habits', author:'James Clear', isbn:'978-0-7352-1129-5', publisher:'Gramedia', year:2019, category:'Self-Help', description:'Panduan praktis untuk membangun kebiasaan baik dan menghilangkan kebiasaan buruk. Perubahan kecil yang menghasilkan dampak besar.', coverUrl:'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=300&h=400&fit=crop', totalCopies:8, availableCopies:5, location:'Rak B-02', addedDate:'2024-02-10' },
-      { id:'5', title:'Sapiens: Riwayat Singkat Umat Manusia', author:'Yuval Noah Harari', isbn:'978-0-06-231609-7', publisher:'Gramedia', year:2017, category:'Sejarah', description:'Perjalanan epik umat manusia dari zaman batu hingga era modern. Membahas revolusi kognitif, pertanian, dan sains.', coverUrl:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=300&h=400&fit=crop', totalCopies:3, availableCopies:1, location:'Rak C-01', addedDate:'2024-02-15' },
-      { id:'6', title:'Pulang', author:'Tere Liye', isbn:'978-602-0856-78-9', publisher:'Republika', year:2015, category:'Novel', description:'Novel tentang Bujang, seorang pemuda dari pedalaman Sumatera yang memiliki kekuatan luar biasa. Kisah tentang keluarga dan kehormatan.', coverUrl:'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=300&h=400&fit=crop', totalCopies:4, availableCopies:2, location:'Rak A-03', addedDate:'2024-03-01' },
-      { id:'7', title:'Pemrograman Web dengan React', author:'Edi Sutrisno', isbn:'978-602-123-456-7', publisher:'Informatika', year:2023, category:'Teknologi', description:'Buku panduan lengkap mempelajari React.js dari dasar hingga mahir. Mencakup hooks, state management, dan routing.', coverUrl:'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=400&fit=crop', totalCopies:5, availableCopies:5, location:'Rak D-01', addedDate:'2024-03-10' },
-      { id:'8', title:'Sejarah Indonesia Modern', author:'M.C. Ricklefs', isbn:'978-979-220-123-4', publisher:'Serambi', year:2008, category:'Sejarah', description:'Kajian komprehensif tentang sejarah Indonesia dari masa kolonial hingga era reformasi.', coverUrl:'https://images.unsplash.com/photo-1461360370896-922624d12571?w=300&h=400&fit=crop', totalCopies:3, availableCopies:2, location:'Rak C-02', addedDate:'2024-03-15' },
-      { id:'9', title:'Matematika Diskrit', author:'Rinaldi Munir', isbn:'978-979-3456-78-9', publisher:'Informatika', year:2020, category:'Pendidikan', description:'Buku teks matematika diskrit yang membahas logika, himpunan, graf, kombinatorik, dan teori bilangan.', coverUrl:'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=300&h=400&fit=crop', totalCopies:7, availableCopies:6, location:'Rak D-02', addedDate:'2024-03-20' },
-      { id:'10', title:'Negeri 5 Menara', author:'Ahmad Fuadi', isbn:'978-979-223-456-7', publisher:'Gramedia', year:2009, category:'Novel', description:'Kisah inspiratif tentang enam santri dari berbagai daerah di Indonesia yang berjuang meraih mimpi di pesantren.', coverUrl:'https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=300&h=400&fit=crop', totalCopies:4, availableCopies:3, location:'Rak A-04', addedDate:'2024-04-01' }
-    ];
-
-    const DEFAULT_LOANS = [
-      { id:'L001', bookId:'1', bookTitle:'Laskar Pelangi', userId:'U002', userName:'Budi Santoso', borrowDate:'2024-04-01', dueDate:'2024-04-15', status:'borrowed' },
-      { id:'L002', bookId:'2', bookTitle:'Bumi Manusia', userId:'U003', userName:'Siti Aminah', borrowDate:'2024-03-20', dueDate:'2024-04-03', returnDate:'2024-04-02', status:'returned' },
-      { id:'L003', bookId:'5', bookTitle:'Sapiens: Riwayat Singkat Umat Manusia', userId:'U002', userName:'Budi Santoso', borrowDate:'2024-03-25', dueDate:'2024-04-08', status:'overdue' }
-    ];
-
-    // State
-    let books = JSON.parse(localStorage.getItem('opac_books')) || DEFAULT_BOOKS;
-    let loans = JSON.parse(localStorage.getItem('opac_loans')) || DEFAULT_LOANS;
-    let currentUser = JSON.parse(localStorage.getItem('opac_user')) || null;
-    let loanFilter = 'all';
-
-    function saveBooks() { localStorage.setItem('opac_books', JSON.stringify(books)); }
-    function saveLoans() { localStorage.setItem('opac_loans', JSON.stringify(loans)); }
-    function saveUser() { localStorage.setItem('opac_user', JSON.stringify(currentUser)); }
-
-    // ==========================================
-    // FIREBASE CONFIGURATION (Optional)
+    // FIREBASE CONFIGURATION
     // ==========================================
     /*
-    // Uncomment and fill in your Firebase config to use Firebase instead of localStorage
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -591,45 +629,56 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const USE_FIREBASE = true;
     */
+    const USE_FIREBASE = false;
 
     // ==========================================
     // CLOUDINARY CONFIGURATION
     // ==========================================
     /*
-    // Uncomment and fill in your Cloudinary cloud name and upload preset
     const CLOUDINARY_CLOUD_NAME = 'your_cloud_name';
     const CLOUDINARY_UPLOAD_PRESET = 'your_upload_preset';
     */
 
-    function openCloudinaryWidget() {
-      if (typeof cloudinary !== 'undefined' && typeof CLOUDINARY_CLOUD_NAME !== 'undefined') {
-        cloudinary.openUploadWidget({
-          cloudName: CLOUDINARY_CLOUD_NAME,
-          uploadPreset: CLOUDINARY_UPLOAD_PRESET,
-          sources: ['local', 'url'],
-          cropping: true,
-          croppingAspectRatio: 0.75,
-          maxFiles: 1
-        }, (error, result) => {
-          if (!error && result && result.event === 'success') {
-            const url = result.info.secure_url;
-            document.getElementById('add-cover-url').value = url;
-            document.getElementById('book-cover-preview').innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
-          }
-        });
-      } else {
-        // Demo mode - use placeholder
-        const placeholders = [
-          'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop',
-          'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop',
-          'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=400&fit=crop',
-        ];
-        const url = placeholders[Math.floor(Math.random() * placeholders.length)];
-        document.getElementById('add-cover-url').value = url;
-        document.getElementById('book-cover-preview').innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
-        alert('Mode demo: Cloudinary belum dikonfigurasi. Menggunakan gambar placeholder.\n\nUntuk menggunakan Cloudinary, tambahkan konfigurasi di bagian CLOUDINARY CONFIGURATION pada file HTML.');
-      }
+    // ==========================================
+    // DATA & STATE MANAGEMENT
+    // ==========================================
+    
+    const DEFAULT_BOOKS = [
+      { id:'1', title:'Laskar Pelangi', author:'Andrea Hirata', isbn:'978-979-3062-79-5', publisher:'Bentang Pustaka', year:2005, category:'Novel', description:'Novel yang mengisahkan kehidupan 10 anak dari keluarga miskin di Belitung.', coverUrl:'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop', totalCopies:5, availableCopies:3, location:'Rak A-01', addedDate:'2024-01-15' },
+      { id:'2', title:'Bumi Manusia', author:'Pramoedya Ananta Toer', isbn:'978-979-9023-00-8', publisher:'Hasta Mitra', year:1980, category:'Novel', description:'Novel pertama dari Tetralogi Buru.', coverUrl:'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop', totalCopies:4, availableCopies:2, location:'Rak A-02', addedDate:'2024-01-20' },
+      { id:'3', title:'Filosofi Teras', author:'Henry Manampiring', isbn:'978-602-291-567-8', publisher:'Kompas', year:2018, category:'Self-Help', description:'Buku yang memperkenalkan filsafat Stoa.', coverUrl:'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=400&fit=crop', totalCopies:6, availableCopies:4, location:'Rak B-01', addedDate:'2024-02-01' },
+      { id:'4', title:'Atomic Habits', author:'James Clear', isbn:'978-0-7352-1129-5', publisher:'Gramedia', year:2019, category:'Self-Help', description:'Panduan praktis untuk membangun kebiasaan baik.', coverUrl:'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=300&h=400&fit=crop', totalCopies:8, availableCopies:5, location:'Rak B-02', addedDate:'2024-02-10' },
+      { id:'5', title:'Sapiens', author:'Yuval Noah Harari', isbn:'978-0-06-231609-7', publisher:'Gramedia', year:2017, category:'Sejarah', description:'Perjalanan epik umat manusia.', coverUrl:'https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=300&h=400&fit=crop', totalCopies:3, availableCopies:1, location:'Rak C-01', addedDate:'2024-02-15' }
+    ];
+
+    let books = JSON.parse(localStorage.getItem('opac_books')) || DEFAULT_BOOKS;
+    let loans = JSON.parse(localStorage.getItem('opac_loans')) || [];
+    let currentUser = JSON.parse(localStorage.getItem('opac_user')) || null;
+    let loanFilter = 'all';
+
+    function saveBooks() { localStorage.setItem('opac_books', JSON.stringify(books)); }
+    function saveLoans() { localStorage.setItem('opac_loans', JSON.stringify(loans)); }
+    function saveUser() { localStorage.setItem('opac_user', JSON.stringify(currentUser)); }
+
+    // ==========================================
+    // PASSWORD HASHING (for localStorage fallback)
+    // ==========================================
+    async function hashPassword(password) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // ==========================================
+    // CHECK IF ADMIN EXISTS
+    // ==========================================
+    function hasAdmin() {
+      const users = JSON.parse(localStorage.getItem('opac_users') || '[]');
+      return users.some(u => u.role === 'admin');
     }
 
     // ==========================================
@@ -645,20 +694,24 @@
       const [page, params] = hash.split('?');
       const queryParams = new URLSearchParams(params || '');
 
-      // Hide all pages
+      // Check if admin exists
+      if (!hasAdmin() && page !== 'setup') {
+        navigate('setup');
+        return;
+      }
+
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
       // Auth guard
-      if ((page === 'admin' || page === 'admin-add' || page === 'admin-loans') && (!currentUser || currentUser.role !== 'admin')) {
+      if ((page === 'admin' || page === 'admin-add' || page === 'admin-loans' || page === 'admin-borrowers') && (!currentUser || currentUser.role !== 'admin')) {
         navigate('login');
         return;
       }
-      if (page === 'member' && !currentUser) {
+      if ((page === 'profile' || page === 'my-books') && !currentUser) {
         navigate('login');
         return;
       }
 
-      // Show page
       const pageEl = document.getElementById('page-' + page);
       if (pageEl) {
         pageEl.classList.add('active');
@@ -666,17 +719,17 @@
         document.getElementById('page-home').classList.add('active');
       }
 
-      // Render page content
       switch(page) {
         case 'home': renderHome(); break;
         case 'catalog': renderCatalog(queryParams); break;
         case 'book': renderBookDetail(queryParams.get('id')); break;
+        case 'profile': renderProfile(); break;
+        case 'my-books': renderMyBooks(); break;
         case 'admin': renderAdminDashboard(); break;
         case 'admin-loans': renderManageLoans(); break;
-        case 'member': renderMemberDashboard(); break;
+        case 'admin-borrowers': renderBorrowers(); break;
       }
 
-      // Update nav
       updateNav();
       window.scrollTo(0, 0);
     }
@@ -694,19 +747,17 @@
         const desktopHTML = isAdmin ? `
           <div class="flex items-center space-x-2">
             <a href="#admin" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-1">dashboard</span> Dashboard</a>
-            <a href="#admin-add" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-1">add_circle</span> Tambah Buku</a>
-            <a href="#admin-loans" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-1">swap_horiz</span> Peminjaman</a>
+            <a href="#profile" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-1">account_circle</span> Profil</a>
             <div class="flex items-center space-x-2 ml-4 pl-4 border-l border-gray-200">
-              <span class="material-icons text-indigo-600">account_circle</span>
               <span class="text-sm text-gray-700">${currentUser.name}</span>
               <button onclick="handleLogout()" class="ml-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm font-medium">Keluar</button>
             </div>
           </div>
         ` : `
           <div class="flex items-center space-x-2">
-            <a href="#member" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-1">person</span> Akun Saya</a>
+            <a href="#my-books" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-1">library_books</span> Buku Saya</a>
+            <a href="#profile" class="nav-link flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-1">account_circle</span> Profil</a>
             <div class="flex items-center space-x-2 ml-4 pl-4 border-l border-gray-200">
-              <span class="material-icons text-indigo-600">account_circle</span>
               <span class="text-sm text-gray-700">${currentUser.name}</span>
               <button onclick="handleLogout()" class="ml-2 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 text-sm font-medium">Keluar</button>
             </div>
@@ -716,16 +767,16 @@
 
         const mobileHTML = isAdmin ? `
           <a href="#admin" onclick="closeMobileMenu()" class="flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-2">dashboard</span> Dashboard</a>
-          <a href="#admin-add" onclick="closeMobileMenu()" class="flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-2">add_circle</span> Tambah Buku</a>
-          <a href="#admin-loans" onclick="closeMobileMenu()" class="flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-2">swap_horiz</span> Peminjaman</a>
+          <a href="#profile" onclick="closeMobileMenu()" class="flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-2">account_circle</span> Profil</a>
           <div class="pt-2 border-t border-gray-100">
-            <div class="flex items-center px-3 py-2"><span class="material-icons text-indigo-600 mr-2">account_circle</span><span class="text-sm text-gray-700">${currentUser.name}</span></div>
+            <div class="flex items-center px-3 py-2"><span class="text-sm text-gray-700">${currentUser.name}</span></div>
             <button onclick="handleLogout();closeMobileMenu()" class="w-full text-left flex items-center px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"><span class="material-icons text-sm mr-2">logout</span> Keluar</button>
           </div>
         ` : `
-          <a href="#member" onclick="closeMobileMenu()" class="flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-2">person</span> Akun Saya</a>
+          <a href="#my-books" onclick="closeMobileMenu()" class="flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-2">library_books</span> Buku Saya</a>
+          <a href="#profile" onclick="closeMobileMenu()" class="flex items-center px-3 py-2 text-gray-700 hover:text-indigo-600 rounded-lg hover:bg-indigo-50"><span class="material-icons text-sm mr-2">account_circle</span> Profil</a>
           <div class="pt-2 border-t border-gray-100">
-            <div class="flex items-center px-3 py-2"><span class="material-icons text-indigo-600 mr-2">account_circle</span><span class="text-sm text-gray-700">${currentUser.name}</span></div>
+            <div class="flex items-center px-3 py-2"><span class="text-sm text-gray-700">${currentUser.name}</span></div>
             <button onclick="handleLogout();closeMobileMenu()" class="w-full text-left flex items-center px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg"><span class="material-icons text-sm mr-2">logout</span> Keluar</button>
           </div>
         `;
@@ -768,36 +819,89 @@
     // AUTH HANDLERS
     // ==========================================
 
-    function handleLogin(e) {
+    async function handleSetup(e) {
+      e.preventDefault();
+      const name = document.getElementById('setup-name').value;
+      const email = document.getElementById('setup-email').value;
+      const password = document.getElementById('setup-password').value;
+      const confirm = document.getElementById('setup-confirm').value;
+      const errorEl = document.getElementById('setup-error');
+      const errorText = document.getElementById('setup-error-text');
+
+      if (password !== confirm) {
+        errorEl.classList.remove('hidden');
+        errorText.textContent = 'Password tidak cocok';
+        return;
+      }
+      if (password.length < 8) {
+        errorEl.classList.remove('hidden');
+        errorText.textContent = 'Password minimal 8 karakter';
+        return;
+      }
+
+      if (USE_FIREBASE) {
+        // Firebase implementation
+        try {
+          const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+          await userCredential.user.updateProfile({ displayName: name });
+          await db.collection('users').doc(userCredential.user.uid).set({
+            name, email, role: 'admin', memberSince: new Date().toISOString().split('T')[0]
+          });
+          currentUser = { id: userCredential.user.uid, name, email, role: 'admin', memberSince: new Date().toISOString().split('T')[0] };
+          saveUser();
+          navigate('admin');
+        } catch (error) {
+          errorEl.classList.remove('hidden');
+          errorText.textContent = error.message;
+        }
+      } else {
+        // localStorage implementation
+        const users = JSON.parse(localStorage.getItem('opac_users') || '[]');
+        const hashedPassword = await hashPassword(password);
+        const newUser = { id: 'admin-' + Date.now(), name, email, password: hashedPassword, role: 'admin', memberSince: new Date().toISOString().split('T')[0] };
+        users.push(newUser);
+        localStorage.setItem('opac_users', JSON.stringify(users));
+        currentUser = { id: newUser.id, name, email, role: 'admin', memberSince: newUser.memberSince };
+        saveUser();
+        navigate('admin');
+      }
+    }
+
+    async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
       const errorEl = document.getElementById('login-error');
       const errorText = document.getElementById('login-error-text');
 
-      // Admin check
-      if (email === 'admin@perpustakaan.id' && password === 'admin123') {
-        currentUser = { id:'admin-001', name:'Admin Perpustakaan', email:'admin@perpustakaan.id', role:'admin', memberSince:'2024-01-01' };
-        saveUser();
-        navigate('admin');
-        return;
+      if (USE_FIREBASE) {
+        try {
+          const userCredential = await auth.signInWithEmailAndPassword(email, password);
+          const userDoc = await db.collection('users').doc(userCredential.user.uid).get();
+          const userData = userDoc.data();
+          currentUser = { id: userCredential.user.uid, name: userData.name, email: userData.email, role: userData.role, memberSince: userData.memberSince };
+          saveUser();
+          navigate(userData.role === 'admin' ? 'admin' : 'home');
+        } catch (error) {
+          errorEl.classList.remove('hidden');
+          errorText.textContent = 'Email atau password salah';
+        }
+      } else {
+        const users = JSON.parse(localStorage.getItem('opac_users') || '[]');
+        const hashedPassword = await hashPassword(password);
+        const found = users.find(u => u.email === email && u.password === hashedPassword);
+        if (found) {
+          currentUser = { id: found.id, name: found.name, email: found.email, role: found.role, memberSince: found.memberSince };
+          saveUser();
+          navigate(found.role === 'admin' ? 'admin' : 'home');
+        } else {
+          errorEl.classList.remove('hidden');
+          errorText.textContent = 'Email atau password salah';
+        }
       }
-
-      // Member check
-      const users = JSON.parse(localStorage.getItem('opac_users') || '[]');
-      const found = users.find(u => u.email === email && u.password === password);
-      if (found) {
-        currentUser = { id:found.id, name:found.name, email:found.email, role:'member', memberSince:found.memberSince };
-        saveUser();
-        navigate('home');
-        return;
-      }
-
-      errorEl.classList.remove('hidden');
-      errorText.textContent = 'Email atau password salah';
     }
 
-    function handleRegister(e) {
+    async function handleRegister(e) {
       e.preventDefault();
       const name = document.getElementById('register-name').value;
       const email = document.getElementById('register-email').value;
@@ -811,28 +915,47 @@
         errorText.textContent = 'Password tidak cocok';
         return;
       }
-      if (password.length < 6) {
+      if (password.length < 8) {
         errorEl.classList.remove('hidden');
-        errorText.textContent = 'Password minimal 6 karakter';
+        errorText.textContent = 'Password minimal 8 karakter';
         return;
       }
 
-      const users = JSON.parse(localStorage.getItem('opac_users') || '[]');
-      if (users.find(u => u.email === email)) {
-        errorEl.classList.remove('hidden');
-        errorText.textContent = 'Email sudah terdaftar';
-        return;
+      if (USE_FIREBASE) {
+        try {
+          const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+          await userCredential.user.updateProfile({ displayName: name });
+          await db.collection('users').doc(userCredential.user.uid).set({
+            name, email, role: 'member', memberSince: new Date().toISOString().split('T')[0]
+          });
+          currentUser = { id: userCredential.user.uid, name, email, role: 'member', memberSince: new Date().toISOString().split('T')[0] };
+          saveUser();
+          navigate('home');
+        } catch (error) {
+          errorEl.classList.remove('hidden');
+          errorText.textContent = error.message;
+        }
+      } else {
+        const users = JSON.parse(localStorage.getItem('opac_users') || '[]');
+        if (users.find(u => u.email === email)) {
+          errorEl.classList.remove('hidden');
+          errorText.textContent = 'Email sudah terdaftar';
+          return;
+        }
+        const hashedPassword = await hashPassword(password);
+        const newUser = { id: 'U' + Date.now(), name, email, password: hashedPassword, role: 'member', memberSince: new Date().toISOString().split('T')[0] };
+        users.push(newUser);
+        localStorage.setItem('opac_users', JSON.stringify(users));
+        currentUser = { id: newUser.id, name, email, role: 'member', memberSince: newUser.memberSince };
+        saveUser();
+        navigate('home');
       }
-
-      const newUser = { id:'U'+Date.now(), name, email, password, memberSince:new Date().toISOString().split('T')[0] };
-      users.push(newUser);
-      localStorage.setItem('opac_users', JSON.stringify(users));
-      currentUser = { id:newUser.id, name:newUser.name, email:newUser.email, role:'member', memberSince:newUser.memberSince };
-      saveUser();
-      navigate('home');
     }
 
     function handleLogout() {
+      if (USE_FIREBASE) {
+        auth.signOut();
+      }
       currentUser = null;
       localStorage.removeItem('opac_user');
       navigate('home');
@@ -850,7 +973,6 @@
     }
 
     function renderHome() {
-      // Stats
       const totalBooks = books.length;
       const totalAvailable = books.reduce((s,b) => s + b.availableCopies, 0);
       const totalCategories = [...new Set(books.map(b => b.category))].length;
@@ -876,8 +998,6 @@
           <div class="text-sm text-gray-500">Anggota</div>
         </div>
       `;
-
-      // Recent books
       const recent = [...books].reverse().slice(0, 6);
       document.getElementById('home-recent-books').innerHTML = recent.map(book => `
         <a href="#book?id=${book.id}" class="group">
@@ -920,9 +1040,7 @@
 
     function renderCatalogResults(query, category) {
       let results = [...books];
-      if (category && category !== 'Semua Kategori') {
-        results = results.filter(b => b.category === category);
-      }
+      if (category && category !== 'Semua Kategori') results = results.filter(b => b.category === category);
       if (query.trim()) {
         const q = query.toLowerCase();
         results = results.filter(b => b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || b.isbn.includes(q) || b.publisher.toLowerCase().includes(q));
@@ -932,7 +1050,7 @@
       else if (sortBy === 'year') results.sort((a,b) => b.year - a.year);
       else if (sortBy === 'author') results.sort((a,b) => a.author.localeCompare(b.author));
 
-      document.getElementById('catalog-count').innerHTML = `Menampilkan <span class="font-semibold text-gray-800">${results.length}</span> buku${(query || category !== 'Semua Kategori') ? ' untuk "<span class="text-indigo-600">' + (query || category) + '</span>"' : ''}`;
+      document.getElementById('catalog-count').innerHTML = `Menampilkan <span class="font-semibold text-gray-800">${results.length}</span> buku`;
 
       if (results.length > 0) {
         document.getElementById('catalog-results').innerHTML = results.map(book => `
@@ -963,7 +1081,6 @@
           <div class="col-span-full text-center py-16">
             <span class="material-icons text-6xl text-gray-300 mb-4">search_off</span>
             <h3 class="text-xl font-semibold text-gray-600 mb-2">Buku tidak ditemukan</h3>
-            <p class="text-gray-500">Coba ubah kata kunci atau kategori pencarian Anda</p>
           </div>
         `;
       }
@@ -976,29 +1093,16 @@
     function renderBookDetail(bookId) {
       const book = books.find(b => b.id === bookId);
       const container = document.getElementById('book-detail-content');
-
       if (!book) {
-        container.innerHTML = `
-          <div class="text-center py-16">
-            <span class="material-icons text-6xl text-gray-300 mb-4">book</span>
-            <h2 class="text-2xl font-bold text-gray-600 mb-2">Buku Tidak Ditemukan</h2>
-            <p class="text-gray-500 mb-6">Buku yang Anda cari tidak ada atau telah dihapus</p>
-            <a href="#catalog" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors">
-              <span class="material-icons text-sm mr-2">arrow_back</span> Kembali ke Katalog
-            </a>
-          </div>
-        `;
+        container.innerHTML = `<div class="text-center py-16"><span class="material-icons text-6xl text-gray-300 mb-4">book</span><h2 class="text-2xl font-bold text-gray-600 mb-2">Buku Tidak Ditemukan</h2><a href="#catalog" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-xl">Kembali ke Katalog</a></div>`;
         return;
       }
-
       document.getElementById('book-breadcrumb').textContent = book.title;
       container.innerHTML = `
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
             <div class="lg:col-span-1 p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-              <div class="w-full max-w-[280px]">
-                <img src="${book.coverUrl}" alt="${book.title}" class="w-full rounded-xl shadow-lg">
-              </div>
+              <div class="w-full max-w-[280px]"><img src="${book.coverUrl}" alt="${book.title}" class="w-full rounded-xl shadow-lg"></div>
             </div>
             <div class="lg:col-span-2 p-8">
               <div class="flex items-start justify-between flex-wrap gap-4">
@@ -1007,51 +1111,25 @@
                   <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">${book.title}</h1>
                   <p class="text-lg text-gray-600">oleh <span class="font-medium text-gray-800">${book.author}</span></p>
                 </div>
-                <div class="text-right">
-                  <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${book.availableCopies > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
-                    <span class="w-2 h-2 rounded-full mr-2 ${book.availableCopies > 0 ? 'bg-green-500' : 'bg-red-500'}"></span>
-                    ${book.availableCopies > 0 ? book.availableCopies + ' Tersedia' : 'Tidak Tersedia'}
-                  </span>
-                </div>
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${book.availableCopies > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                  <span class="w-2 h-2 rounded-full mr-2 ${book.availableCopies > 0 ? 'bg-green-500' : 'bg-red-500'}"></span>
+                  ${book.availableCopies > 0 ? book.availableCopies + ' Tersedia' : 'Tidak Tersedia'}
+                </span>
               </div>
               <div class="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">business</span>Penerbit</div>
-                  <div class="font-medium text-gray-800">${book.publisher}</div>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">calendar_today</span>Tahun</div>
-                  <div class="font-medium text-gray-800">${book.year}</div>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">tag</span>ISBN</div>
-                  <div class="font-medium text-gray-800 text-xs">${book.isbn}</div>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">inventory_2</span>Total Eksemplar</div>
-                  <div class="font-medium text-gray-800">${book.totalCopies} eksemplar</div>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">location_on</span>Lokasi</div>
-                  <div class="font-medium text-gray-800">${book.location}</div>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">event</span>Ditambahkan</div>
-                  <div class="font-medium text-gray-800">${book.addedDate}</div>
-                </div>
+                <div class="bg-gray-50 rounded-xl p-4"><div class="text-gray-500 text-sm mb-1">Penerbit</div><div class="font-medium text-gray-800">${book.publisher}</div></div>
+                <div class="bg-gray-50 rounded-xl p-4"><div class="text-gray-500 text-sm mb-1">Tahun</div><div class="font-medium text-gray-800">${book.year}</div></div>
+                <div class="bg-gray-50 rounded-xl p-4"><div class="text-gray-500 text-sm mb-1">ISBN</div><div class="font-medium text-gray-800 text-xs">${book.isbn}</div></div>
+                <div class="bg-gray-50 rounded-xl p-4"><div class="text-gray-500 text-sm mb-1">Total Eksemplar</div><div class="font-medium text-gray-800">${book.totalCopies}</div></div>
+                <div class="bg-gray-50 rounded-xl p-4"><div class="text-gray-500 text-sm mb-1">Lokasi</div><div class="font-medium text-gray-800">${book.location}</div></div>
+                <div class="bg-gray-50 rounded-xl p-4"><div class="text-gray-500 text-sm mb-1">Ditambahkan</div><div class="font-medium text-gray-800">${book.addedDate}</div></div>
               </div>
-              <div class="mt-6">
-                <h3 class="font-semibold text-gray-800 mb-2 flex items-center"><span class="material-icons text-sm mr-1">description</span> Deskripsi</h3>
-                <p class="text-gray-600 leading-relaxed">${book.description}</p>
-              </div>
+              <div class="mt-6"><h3 class="font-semibold text-gray-800 mb-2">Deskripsi</h3><p class="text-gray-600 leading-relaxed">${book.description}</p></div>
               <div class="mt-8 flex flex-wrap gap-3">
-                <button onclick="handleBorrow('${book.id}')" ${book.availableCopies <= 0 ? 'disabled' : ''} class="flex items-center px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
-                  <span class="material-icons text-sm mr-2">library_add</span>
-                  ${book.availableCopies > 0 ? 'Pinjam Buku' : 'Tidak Tersedia'}
+                <button onclick="handleBorrow('${book.id}')" ${book.availableCopies <= 0 ? 'disabled' : ''} class="flex items-center px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                  <span class="material-icons text-sm mr-2">library_add</span> ${book.availableCopies > 0 ? 'Pinjam Buku' : 'Tidak Tersedia'}
                 </button>
-                <a href="#catalog" class="flex items-center px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium">
-                  <span class="material-icons text-sm mr-2">arrow_back</span> Kembali
-                </a>
+                <a href="#catalog" class="flex items-center px-6 py-3 border border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 font-medium"><span class="material-icons text-sm mr-2">arrow_back</span> Kembali</a>
               </div>
             </div>
           </div>
@@ -1064,25 +1142,202 @@
       if (currentUser.role === 'admin') { alert('Admin tidak dapat meminjam buku'); return; }
       const book = books.find(b => b.id === bookId);
       if (!book || book.availableCopies <= 0) { alert('Maaf, buku sedang tidak tersedia'); return; }
-
-      const dueDate = new Date();
-      dueDate.setDate(dueDate.getDate() + 14);
+      const dueDate = new Date(); dueDate.setDate(dueDate.getDate() + 14);
       const newLoan = {
-        id: 'L' + Date.now(),
-        bookId: book.id,
-        bookTitle: book.title,
-        userId: currentUser.id,
-        userName: currentUser.name,
+        id: 'L' + Date.now(), bookId: book.id, bookTitle: book.title,
+        userId: currentUser.id, userName: currentUser.name,
         borrowDate: new Date().toISOString().split('T')[0],
-        dueDate: dueDate.toISOString().split('T')[0],
-        status: 'borrowed'
+        dueDate: dueDate.toISOString().split('T')[0], status: 'borrowed'
       };
-      loans.push(newLoan);
-      saveLoans();
-      book.availableCopies--;
-      saveBooks();
+      loans.push(newLoan); saveLoans();
+      book.availableCopies--; saveBooks();
       alert('Berhasil meminjam "' + book.title + '". Silakan ambil di loket peminjaman.');
-      navigate('member');
+      navigate('my-books');
+    }
+
+    // ==========================================
+    // PROFILE PAGE
+    // ==========================================
+
+    function renderProfile() {
+      if (!currentUser) return;
+      const myLoans = loans.filter(l => l.userId === currentUser.id);
+      const activeLoans = myLoans.filter(l => l.status === 'borrowed' || l.status === 'overdue');
+      const returnedLoans = myLoans.filter(l => l.status === 'returned');
+
+      document.getElementById('profile-content').innerHTML = `
+        <div class="mb-6">
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+            <span class="material-icons text-indigo-600 mr-2">account_circle</span> Profil Saya
+          </h1>
+          <p class="text-gray-500 mt-1">Kelola informasi akun Anda</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+            <div class="flex items-center gap-6">
+              <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur">
+                <span class="material-icons text-5xl text-white">account_circle</span>
+              </div>
+              <div>
+                <h2 class="text-2xl font-bold">${currentUser.name}</h2>
+                <p class="text-indigo-100">${currentUser.email}</p>
+                <div class="flex items-center gap-2 mt-2">
+                  <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-medium backdrop-blur">
+                    ${currentUser.role === 'admin' ? '👑 Admin' : '📚 Anggota'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-8">
+            <h3 class="font-semibold text-gray-800 mb-4 flex items-center">
+              <span class="material-icons text-sm mr-2 text-indigo-600">info</span> Informasi Akun
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-gray-50 rounded-xl p-4">
+                <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">person</span> Nama</div>
+                <div class="font-medium text-gray-800">${currentUser.name}</div>
+              </div>
+              <div class="bg-gray-50 rounded-xl p-4">
+                <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">mail</span> Email</div>
+                <div class="font-medium text-gray-800">${currentUser.email}</div>
+              </div>
+              <div class="bg-gray-50 rounded-xl p-4">
+                <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">badge</span> Role</div>
+                <div class="font-medium text-gray-800 capitalize">${currentUser.role === 'admin' ? 'Administrator' : 'Anggota'}</div>
+              </div>
+              <div class="bg-gray-50 rounded-xl p-4">
+                <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">event</span> Bergabung Sejak</div>
+                <div class="font-medium text-gray-800">${currentUser.memberSince}</div>
+              </div>
+              <div class="bg-gray-50 rounded-xl p-4">
+                <div class="flex items-center text-gray-500 text-sm mb-1"><span class="material-icons text-sm mr-1">fingerprint</span> User ID</div>
+                <div class="font-medium text-gray-800 text-xs">${currentUser.id}</div>
+              </div>
+            </div>
+
+            ${currentUser.role === 'member' ? `
+            <h3 class="font-semibold text-gray-800 mt-8 mb-4 flex items-center">
+              <span class="material-icons text-sm mr-2 text-indigo-600">analytics</span> Statistik Peminjaman
+            </h3>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="bg-blue-50 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-blue-600">${activeLoans.length}</div>
+                <div class="text-sm text-blue-700 mt-1">Sedang Dipinjam</div>
+              </div>
+              <div class="bg-green-50 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-green-600">${returnedLoans.length}</div>
+                <div class="text-sm text-green-700 mt-1">Dikembalikan</div>
+              </div>
+              <div class="bg-gray-50 rounded-xl p-4 text-center">
+                <div class="text-2xl font-bold text-gray-800">${myLoans.length}</div>
+                <div class="text-sm text-gray-600 mt-1">Total</div>
+              </div>
+            </div>
+            <div class="mt-6 flex gap-3">
+              <a href="#my-books" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium text-sm">
+                <span class="material-icons text-sm mr-1">library_books</span> Lihat Buku Saya
+              </a>
+            </div>
+            ` : `
+            <h3 class="font-semibold text-gray-800 mt-8 mb-4 flex items-center">
+              <span class="material-icons text-sm mr-2 text-indigo-600">shield</span> Akses Admin
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <a href="#admin" class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-colors">
+                <span class="material-icons text-indigo-600 mb-1">dashboard</span>
+                <span class="text-xs font-medium text-indigo-700">Dashboard</span>
+              </a>
+              <a href="#admin-add" class="flex flex-col items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors">
+                <span class="material-icons text-green-600 mb-1">add_circle</span>
+                <span class="text-xs font-medium text-green-700">Tambah Buku</span>
+              </a>
+              <a href="#admin-loans" class="flex flex-col items-center p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-colors">
+                <span class="material-icons text-orange-600 mb-1">swap_horiz</span>
+                <span class="text-xs font-medium text-orange-700">Peminjaman</span>
+              </a>
+              <a href="#admin-borrowers" class="flex flex-col items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors">
+                <span class="material-icons text-purple-600 mb-1">people</span>
+                <span class="text-xs font-medium text-purple-700">Peminjam</span>
+              </a>
+            </div>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // MY BOOKS PAGE (Member)
+    // ==========================================
+
+    function renderMyBooks() {
+      if (!currentUser) return;
+      const myLoans = loans.filter(l => l.userId === currentUser.id);
+      const activeLoans = myLoans.filter(l => l.status === 'borrowed' || l.status === 'overdue');
+      const returnedLoans = myLoans.filter(l => l.status === 'returned');
+
+      document.getElementById('my-books-content').innerHTML = `
+        <div class="mb-6">
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-800 flex items-center">
+            <span class="material-icons text-indigo-600 mr-2">library_books</span> Buku Saya
+          </h1>
+          <p class="text-gray-500 mt-1">Daftar buku yang Anda pinjam</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4 mb-8">
+          <div class="bg-white rounded-xl p-5 shadow-sm text-center">
+            <div class="text-2xl font-bold text-blue-600">${activeLoans.length}</div>
+            <div class="text-sm text-gray-500 mt-1">Sedang Dipinjam</div>
+          </div>
+          <div class="bg-white rounded-xl p-5 shadow-sm text-center">
+            <div class="text-2xl font-bold text-green-600">${returnedLoans.length}</div>
+            <div class="text-sm text-gray-500 mt-1">Dikembalikan</div>
+          </div>
+          <div class="bg-white rounded-xl p-5 shadow-sm text-center">
+            <div class="text-2xl font-bold text-gray-800">${myLoans.length}</div>
+            <div class="text-sm text-gray-500 mt-1">Total</div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm mb-6">
+          <div class="p-5 border-b border-gray-100">
+            <h2 class="font-semibold text-gray-800 flex items-center"><span class="material-icons text-sm mr-2 text-blue-600">book</span> Peminjaman Aktif</h2>
+          </div>
+          <div class="p-5">
+            ${activeLoans.length > 0 ? `<div class="space-y-4">${activeLoans.map(loan => {
+              const book = books.find(b => b.id === loan.bookId);
+              return `
+              <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                ${book ? `<img src="${book.coverUrl}" class="w-16 h-20 object-cover rounded-lg" alt="">` : '<div class="w-16 h-20 bg-gray-200 rounded-lg"></div>'}
+                <div class="flex-1">
+                  <p class="font-medium text-gray-800">${loan.bookTitle}</p>
+                  <p class="text-sm text-gray-500">Dipinjam: ${loan.borrowDate}</p>
+                  <p class="text-sm ${loan.status === 'overdue' ? 'text-red-600 font-medium' : 'text-gray-500'}">Jatuh tempo: ${loan.dueDate} ${loan.status === 'overdue' ? '<span class="ml-2 px-2 py-0.5 bg-red-100 rounded-full text-xs">TERLAMBAT</span>' : ''}</p>
+                </div>
+                <a href="#book?id=${loan.bookId}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Detail →</a>
+              </div>`;
+            }).join('')}</div>` : `<div class="text-center py-8"><span class="material-icons text-4xl text-gray-300 mb-2">library_books</span><p class="text-gray-500">Tidak ada peminjaman aktif</p><a href="#catalog" class="text-indigo-600 text-sm font-medium hover:text-indigo-800 mt-2 inline-block">Cari buku untuk dipinjam →</a></div>`}
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm">
+          <div class="p-5 border-b border-gray-100">
+            <h2 class="font-semibold text-gray-800 flex items-center"><span class="material-icons text-sm mr-2 text-green-600">history</span> Riwayat</h2>
+          </div>
+          <div class="p-5">
+            ${returnedLoans.length > 0 ? `<div class="space-y-3">${returnedLoans.map(loan => {
+              const book = books.find(b => b.id === loan.bookId);
+              return `
+              <div class="flex items-center gap-4 p-3 border border-gray-100 rounded-xl">
+                ${book ? `<img src="${book.coverUrl}" class="w-12 h-16 object-cover rounded" alt="">` : '<div class="w-12 h-16 bg-gray-200 rounded"></div>'}
+                <div class="flex-1">
+                  <p class="font-medium text-gray-800 text-sm">${loan.bookTitle}</p>
+                  <p class="text-xs text-gray-500">${loan.borrowDate} → ${loan.returnDate}</p>
+                </div>
+                <span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full font-medium">Selesai</span>
+              </div>`;
+            }).join('')}</div>` : `<div class="text-center py-8"><span class="material-icons text-4xl text-gray-300 mb-2">history</span><p class="text-gray-500">Belum ada riwayat</p></div>`}
+          </div>
+        </div>
+      `;
     }
 
     // ==========================================
@@ -1147,231 +1402,16 @@
             `).join('') : '<p class="text-gray-500 text-sm text-center py-4">Belum ada peminjaman</p>'}
           </div>
         </div>
-        <div class="space-y-6">
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <h2 class="font-semibold text-gray-800 mb-4 flex items-center"><span class="material-icons text-sm mr-2 text-indigo-600">bolt</span> Aksi Cepat</h2>
-            <div class="grid grid-cols-2 gap-3">
-              <a href="#admin-add" class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-colors"><span class="material-icons text-indigo-600 mb-1">add_circle</span><span class="text-xs font-medium text-indigo-700">Tambah Buku</span></a>
-              <a href="#admin-loans" class="flex flex-col items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors"><span class="material-icons text-green-600 mb-1">assignment_return</span><span class="text-xs font-medium text-green-700">Pengembalian</span></a>
-              <a href="#catalog" class="flex flex-col items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors"><span class="material-icons text-purple-600 mb-1">search</span><span class="text-xs font-medium text-purple-700">Cari Buku</span></a>
-              <a href="#admin-loans" class="flex flex-col items-center p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-colors"><span class="material-icons text-orange-600 mb-1">warning</span><span class="text-xs font-medium text-orange-700">Cek Terlambat</span></a>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-            <h2 class="font-semibold text-gray-800 mb-4 flex items-center"><span class="material-icons text-sm mr-2 text-indigo-600">analytics</span> Ringkasan</h2>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Total Peminjaman</span><span class="font-semibold text-gray-800">${loans.length}</span></div>
-              <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Dikembalikan</span><span class="font-semibold text-green-600">${returnedLoans.length}</span></div>
-              <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Aktif</span><span class="font-semibold text-blue-600">${activeLoans.length}</span></div>
-              <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Terlambat</span><span class="font-semibold text-red-600">${overdueLoans.length}</span></div>
-              <div class="border-t border-gray-100 pt-3 mt-3">
-                <div class="flex items-center justify-between"><span class="text-sm text-gray-600">Tingkat Pengembalian</span><span class="font-semibold text-gray-800">${loans.length > 0 ? Math.round((returnedLoans.length / loans.length) * 100) : 0}%</span></div>
-              </div>
-            </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <h2 class="font-semibold text-gray-800 mb-4 flex items-center"><span class="material-icons text-sm mr-2 text-indigo-600">bolt</span> Aksi Cepat</h2>
+          <div class="grid grid-cols-2 gap-3">
+            <a href="#admin-add" class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-colors"><span class="material-icons text-indigo-600 mb-1">add_circle</span><span class="text-xs font-medium text-indigo-700">Tambah Buku</span></a>
+            <a href="#admin-loans" class="flex flex-col items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors"><span class="material-icons text-green-600 mb-1">assignment_return</span><span class="text-xs font-medium text-green-700">Pengembalian</span></a>
+            <a href="#admin-borrowers" class="flex flex-col items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors"><span class="material-icons text-purple-600 mb-1">people</span><span class="text-xs font-medium text-purple-700">Daftar Peminjam</span></a>
+            <a href="#catalog" class="flex flex-col items-center p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-colors"><span class="material-icons text-orange-600 mb-1">search</span><span class="text-xs font-medium text-orange-700">Cari Buku</span></a>
           </div>
         </div>
       `;
-    }
-
-    // ==========================================
-    // OPENLIBRARY API INTEGRATION
-    // ==========================================
-
-    async function fetchOpenLibrary() {
-      const isbnInput = document.getElementById('add-isbn');
-      const isbn = isbnInput.value.trim().replace(/[-\s]/g, ''); // Hapus dash & spasi
-      const statusEl = document.getElementById('openlibrary-status');
-      const btn = document.getElementById('btn-openlibrary');
-      const btnIcon = document.getElementById('icon-openlibrary');
-      const btnText = document.getElementById('text-openlibrary');
-
-      if (!isbn) {
-        showOpenLibraryStatus('error', 'Masukkan ISBN terlebih dahulu');
-        return;
-      }
-
-      // Set loading state
-      btn.disabled = true;
-      btn.classList.add('opacity-60', 'cursor-not-allowed');
-      btnIcon.textContent = 'hourglass_empty';
-      btnIcon.classList.add('animate-spin');
-      btnText.textContent = 'Mengambil...';
-      showOpenLibraryStatus('loading', 'Mengambil data dari OpenLibrary...');
-
-      try {
-        const url = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        const bookKey = `ISBN:${isbn}`;
-        const bookData = data[bookKey];
-
-        if (!bookData) {
-          throw new Error('Buku tidak ditemukan di OpenLibrary');
-        }
-
-        // Extract data
-        const title = bookData.title || '';
-        const author = bookData.authors && bookData.authors.length > 0
-          ? bookData.authors.map(a => a.name).join(', ')
-          : '';
-        const publisher = bookData.publishers && bookData.publishers.length > 0
-          ? bookData.publishers[0].name
-          : '';
-        const year = bookData.publish_date ? parseInt(bookData.publish_date) : '';
-        const pages = bookData.number_of_pages || '';
-
-        // Build description from subjects
-        let description = '';
-        if (bookData.subjects && bookData.subjects.length > 0) {
-          const subjectNames = bookData.subjects
-            .map(s => s.name)
-            .filter(n => !/^\d{4}/.test(n) && !/^\d+-\d+$/.test(n))
-            .slice(0, 5);
-          if (subjectNames.length > 0) {
-            description = 'Topik: ' + subjectNames.join(', ') + '.';
-          }
-        }
-
-        // Cover image - try multiple sources
-        let coverUrl = '';
-        // 1. Try cover from OpenLibrary covers API
-        if (bookData.cover && bookData.cover.large) {
-          coverUrl = bookData.cover.large;
-        } else {
-          // 2. Fallback: construct from ISBN
-          coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
-        }
-
-        // Fill form fields
-        if (title && !document.getElementById('add-title').value) {
-          document.getElementById('add-title').value = title;
-        }
-        if (author && !document.getElementById('add-author').value) {
-          document.getElementById('add-author').value = author;
-        }
-        if (publisher && !document.getElementById('add-publisher').value) {
-          document.getElementById('add-publisher').value = publisher;
-        }
-        if (year && !document.getElementById('add-year').value) {
-          document.getElementById('add-year').value = year;
-        }
-        if (description && !document.getElementById('add-description').value) {
-          document.getElementById('add-description').value = description;
-        }
-        if (coverUrl && !document.getElementById('add-cover-url').value) {
-          document.getElementById('add-cover-url').value = coverUrl;
-          document.getElementById('book-cover-preview').innerHTML =
-            `<img src="${coverUrl}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\\'material-icons text-gray-400\\'>image</span>'">`;
-        }
-
-        // Auto-detect category from subjects
-        if (bookData.subjects && bookData.subjects.length > 0) {
-          const subjectText = bookData.subjects.map(s => s.name.toLowerCase()).join(' ');
-          let detectedCategory = 'Novel'; // default
-          if (/fiction|novel|story/.test(subjectText)) detectedCategory = 'Novel';
-          else if (/self-help|self help|psychology|motivation/.test(subjectText)) detectedCategory = 'Self-Help';
-          else if (/history|sejarah|histor/.test(subjectText)) detectedCategory = 'Sejarah';
-          else if (/technology|computer|programming|software/.test(subjectText)) detectedCategory = 'Teknologi';
-          else if (/education|teaching|learning|school/.test(subjectText)) detectedCategory = 'Pendidikan';
-          else if (/science|biology|physics|chemistry|math/.test(subjectText)) detectedCategory = 'Sains';
-          else if (/religion|islam|christian|bible|quran|faith/.test(subjectText)) detectedCategory = 'Agama';
-
-          const categorySelect = document.getElementById('add-category');
-          // Only set if category exists in options
-          const options = Array.from(categorySelect.options).map(o => o.value);
-          if (options.includes(detectedCategory)) {
-            categorySelect.value = detectedCategory;
-          }
-        }
-
-        // Show success
-        const filledFields = [];
-        if (title) filledFields.push('judul');
-        if (author) filledFields.push('penulis');
-        if (publisher) filledFields.push('penerbit');
-        if (year) filledFields.push('tahun');
-        if (coverUrl) filledFields.push('sampul');
-
-        showOpenLibraryStatus('success',
-          `✓ Data berhasil diambil! Field terisi: ${filledFields.join(', ') || 'tidak ada field baru'}${pages ? ` • ${pages} halaman` : ''}`
-        );
-
-      } catch (error) {
-        console.error('OpenLibrary fetch error:', error);
-        showOpenLibraryStatus('error',
-          `Gagal mengambil data: ${error.message}. Pastikan ISBN valid dan coba lagi.`
-        );
-      } finally {
-        // Reset button state
-        btn.disabled = false;
-        btn.classList.remove('opacity-60', 'cursor-not-allowed');
-        btnIcon.classList.remove('animate-spin');
-        btnIcon.textContent = 'auto_fix_high';
-        btnText.textContent = 'Ambil Data';
-      }
-    }
-
-    function showOpenLibraryStatus(type, message) {
-      const statusEl = document.getElementById('openlibrary-status');
-      statusEl.classList.remove('hidden');
-
-      const styles = {
-        success: 'bg-green-50 border-green-200 text-green-700',
-        error: 'bg-red-50 border-green-200 text-red-700',
-        loading: 'bg-blue-50 border-blue-200 text-blue-700'
-      };
-      const icons = {
-        success: 'check_circle',
-        error: 'error',
-        loading: 'hourglass_empty'
-      };
-
-      statusEl.className = `mt-2 p-3 rounded-lg border text-sm flex items-start ${styles[type]}`;
-      statusEl.innerHTML = `
-        <span class="material-icons text-sm mr-2 ${type === 'loading' ? 'animate-spin' : ''}">${icons[type]}</span>
-        <span>${message}</span>
-      `;
-
-      // Auto-hide after 8 seconds for success/error
-      if (type !== 'loading') {
-        setTimeout(() => {
-          statusEl.classList.add('hidden');
-        }, 8000);
-      }
-    }
-
-    // ==========================================
-    // ADMIN ADD BOOK
-    // ==========================================
-
-    function handleAddBook(e) {
-      e.preventDefault();
-      const coverUrl = document.getElementById('add-cover-url').value || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop';
-      const copies = parseInt(document.getElementById('add-copies').value);
-      const newBook = {
-        id: 'BK' + Date.now(),
-        title: document.getElementById('add-title').value,
-        author: document.getElementById('add-author').value,
-        isbn: document.getElementById('add-isbn').value,
-        publisher: document.getElementById('add-publisher').value,
-        year: parseInt(document.getElementById('add-year').value),
-        category: document.getElementById('add-category').value,
-        description: document.getElementById('add-description').value,
-        coverUrl: coverUrl,
-        totalCopies: copies,
-        availableCopies: copies,
-        location: document.getElementById('add-location').value,
-        addedDate: new Date().toISOString().split('T')[0]
-      };
-      books.push(newBook);
-      saveBooks();
-      alert('Buku "' + newBook.title + '" berhasil ditambahkan!');
-      navigate('admin');
     }
 
     // ==========================================
@@ -1379,7 +1419,6 @@
     // ==========================================
 
     function renderManageLoans() {
-      // Filters
       document.getElementById('loan-filters').innerHTML = [
         { key:'all', label:'Semua', icon:'list' },
         { key:'borrowed', label:'Dipinjam', icon:'book' },
@@ -1392,10 +1431,7 @@
         </button>
       `).join('');
 
-      // Table
-      const filtered = loans.filter(l => loanFilter === 'all' || l.status === loanFilter)
-        .sort((a,b) => new Date(b.borrowDate) - new Date(a.borrowDate));
-
+      const filtered = loans.filter(l => loanFilter === 'all' || l.status === loanFilter).sort((a,b) => new Date(b.borrowDate) - new Date(a.borrowDate));
       const statusBadge = (status) => {
         const map = { borrowed:'bg-blue-100 text-blue-700', overdue:'bg-red-100 text-red-700', returned:'bg-green-100 text-green-700' };
         const labels = { borrowed:'Dipinjam', overdue:'Terlambat', returned:'Dikembalikan' };
@@ -1418,14 +1454,14 @@
               </thead>
               <tbody class="divide-y divide-gray-50">
                 ${filtered.map(loan => `
-                  <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4"><p class="font-medium text-gray-800 text-sm">${loan.bookTitle}</p><p class="text-xs text-gray-500">ID: ${loan.bookId}</p></td>
-                    <td class="px-6 py-4"><p class="font-medium text-gray-800 text-sm">${loan.userName}</p><p class="text-xs text-gray-500">ID: ${loan.userId}</p></td>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4"><p class="font-medium text-gray-800 text-sm">${loan.bookTitle}</p></td>
+                    <td class="px-6 py-4"><p class="font-medium text-gray-800 text-sm">${loan.userName}</p><p class="text-xs text-gray-500">${loan.userId}</p></td>
                     <td class="px-6 py-4 text-sm text-gray-600">${loan.borrowDate}</td>
                     <td class="px-6 py-4 text-sm text-gray-600">${loan.dueDate}</td>
                     <td class="px-6 py-4">${statusBadge(loan.status)}</td>
                     <td class="px-6 py-4">
-                      ${(loan.status === 'borrowed' || loan.status === 'overdue') ? `<button onclick="handleReturn('${loan.id}')" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium"><span class="material-icons text-xs mr-1">assignment_return</span> Kembalikan</button>` : `<span class="text-xs text-gray-500">Dikembalikan: ${loan.returnDate || '-'}</span>`}
+                      ${(loan.status === 'borrowed' || loan.status === 'overdue') ? `<button onclick="handleReturn('${loan.id}')" class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 text-sm font-medium"><span class="material-icons text-xs mr-1">assignment_return</span> Kembalikan</button>` : `<span class="text-xs text-gray-500">${loan.returnDate || '-'}</span>`}
                     </td>
                   </tr>
                 `).join('')}
@@ -1434,26 +1470,17 @@
           </div>
         `;
       } else {
-        document.getElementById('loans-table-container').innerHTML = `
-          <div class="text-center py-16">
-            <span class="material-icons text-5xl text-gray-300 mb-3">inbox</span>
-            <p class="text-gray-500">Tidak ada data peminjaman</p>
-          </div>
-        `;
+        document.getElementById('loans-table-container').innerHTML = `<div class="text-center py-16"><span class="material-icons text-5xl text-gray-300 mb-3">inbox</span><p class="text-gray-500">Tidak ada data</p></div>`;
       }
     }
 
-    function setLoanFilter(filter) {
-      loanFilter = filter;
-      renderManageLoans();
-    }
+    function setLoanFilter(filter) { loanFilter = filter; renderManageLoans(); }
 
     function handleReturn(loanId) {
       if (!confirm('Konfirmasi pengembalian buku ini?')) return;
       const loan = loans.find(l => l.id === loanId);
       if (!loan) return;
-      loan.status = 'returned';
-      loan.returnDate = new Date().toISOString().split('T')[0];
+      loan.status = 'returned'; loan.returnDate = new Date().toISOString().split('T')[0];
       saveLoans();
       const book = books.find(b => b.id === loan.bookId);
       if (book) { book.availableCopies++; saveBooks(); }
@@ -1461,71 +1488,181 @@
     }
 
     // ==========================================
-    // MEMBER DASHBOARD
+    // ADMIN BORROWERS PAGE
     // ==========================================
 
-    function renderMemberDashboard() {
-      if (!currentUser) return;
-      const myLoans = loans.filter(l => l.userId === currentUser.id);
-      const activeLoans = myLoans.filter(l => l.status === 'borrowed' || l.status === 'overdue');
-      const returnedLoans = myLoans.filter(l => l.status === 'returned');
+    function renderBorrowers() {
+      const activeLoans = loans.filter(l => l.status === 'borrowed' || l.status === 'overdue');
+      
+      // Group by book
+      const booksWithBorrowers = books.map(book => {
+        const bookLoans = activeLoans.filter(l => l.bookId === book.id);
+        return { book, loans: bookLoans };
+      }).filter(item => item.loans.length > 0);
 
-      document.getElementById('member-content').innerHTML = `
-        <div class="bg-white rounded-2xl shadow-sm p-6 md:p-8 mb-8">
-          <div class="flex flex-col md:flex-row md:items-center gap-6">
-            <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center">
-              <span class="material-icons text-indigo-600 text-4xl">account_circle</span>
+      // Group by user
+      const usersWithLoans = {};
+      activeLoans.forEach(loan => {
+        if (!usersWithLoans[loan.userId]) {
+          usersWithLoans[loan.userId] = { user: { id: loan.userId, name: loan.userName }, loans: [] };
+        }
+        usersWithLoans[loan.userId].loans.push(loan);
+      });
+
+      document.getElementById('borrowers-content').innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Grouped by Book -->
+          <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-5 border-b border-gray-100">
+              <h2 class="font-semibold text-gray-800 flex items-center">
+                <span class="material-icons text-sm mr-2 text-indigo-600">book</span>
+                Buku yang Sedang Dipinjam
+                <span class="ml-2 px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-xs">${booksWithBorrowers.length} buku</span>
+              </h2>
             </div>
-            <div class="flex-1">
-              <h1 class="text-2xl font-bold text-gray-800">${currentUser.name}</h1>
-              <p class="text-gray-500">${currentUser.email}</p>
-              <div class="flex flex-wrap gap-4 mt-3">
-                <span class="flex items-center text-sm text-gray-600"><span class="material-icons text-xs mr-1">badge</span> Anggota sejak ${currentUser.memberSince}</span>
-                <span class="flex items-center text-sm text-gray-600"><span class="material-icons text-xs mr-1">verified</span> Anggota</span>
-              </div>
+            <div class="p-5 space-y-4 max-h-[600px] overflow-y-auto">
+              ${booksWithBorrowers.length > 0 ? booksWithBorrowers.map(item => `
+                <div class="border border-gray-100 rounded-xl p-4">
+                  <div class="flex items-start gap-3 mb-3">
+                    <img src="${item.book.coverUrl}" class="w-12 h-16 object-cover rounded" alt="">
+                    <div class="flex-1">
+                      <a href="#book?id=${item.book.id}" class="font-medium text-gray-800 hover:text-indigo-600">${item.book.title}</a>
+                      <p class="text-xs text-gray-500">${item.book.author}</p>
+                      <p class="text-xs text-gray-400 mt-1">${item.loans.length} dari ${item.book.totalCopies} eksemplar dipinjam</p>
+                    </div>
+                  </div>
+                  <div class="space-y-2 pl-2 border-l-2 border-indigo-100">
+                    ${item.loans.map(loan => `
+                      <div class="flex items-center justify-between text-sm">
+                        <div>
+                          <span class="font-medium text-gray-700">${loan.userName}</span>
+                          <span class="text-xs text-gray-500 ml-2">s/d ${loan.dueDate}</span>
+                        </div>
+                        ${loan.status === 'overdue' ? '<span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Terlambat</span>' : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              `).join('') : '<p class="text-gray-500 text-sm text-center py-8">Tidak ada buku yang sedang dipinjam</p>'}
             </div>
-            <a href="#catalog" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-medium text-sm">
-              <span class="material-icons text-sm mr-1">search</span> Cari Buku
-            </a>
           </div>
-        </div>
-        <div class="grid grid-cols-3 gap-4 mb-8">
-          <div class="bg-white rounded-xl p-5 shadow-sm text-center"><div class="text-2xl font-bold text-blue-600">${activeLoans.length}</div><div class="text-sm text-gray-500 mt-1">Sedang Dipinjam</div></div>
-          <div class="bg-white rounded-xl p-5 shadow-sm text-center"><div class="text-2xl font-bold text-green-600">${returnedLoans.length}</div><div class="text-sm text-gray-500 mt-1">Dikembalikan</div></div>
-          <div class="bg-white rounded-xl p-5 shadow-sm text-center"><div class="text-2xl font-bold text-gray-800">${myLoans.length}</div><div class="text-sm text-gray-500 mt-1">Total Peminjaman</div></div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm mb-6">
-          <div class="p-5 border-b border-gray-100"><h2 class="font-semibold text-gray-800 flex items-center"><span class="material-icons text-sm mr-2 text-blue-600">book</span> Peminjaman Aktif</h2></div>
-          <div class="p-5">
-            ${activeLoans.length > 0 ? `<div class="space-y-4">${activeLoans.map(loan => `
-              <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div class="flex items-center gap-4">
-                  <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"><span class="material-icons text-blue-600">menu_book</span></div>
-                  <div><p class="font-medium text-gray-800">${loan.bookTitle}</p><p class="text-sm text-gray-500">Dipinjam: ${loan.borrowDate}</p></div>
+
+          <!-- Grouped by User -->
+          <div class="bg-white rounded-xl shadow-sm">
+            <div class="p-5 border-b border-gray-100">
+              <h2 class="font-semibold text-gray-800 flex items-center">
+                <span class="material-icons text-sm mr-2 text-purple-600">people</span>
+                Peminjam Aktif
+                <span class="ml-2 px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-xs">${Object.keys(usersWithLoans).length} peminjam</span>
+              </h2>
+            </div>
+            <div class="p-5 space-y-4 max-h-[600px] overflow-y-auto">
+              ${Object.keys(usersWithLoans).length > 0 ? Object.values(usersWithLoans).map(item => `
+                <div class="border border-gray-100 rounded-xl p-4">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                      <span class="material-icons text-purple-600">person</span>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-800">${item.user.name}</div>
+                      <div class="text-xs text-gray-500">${item.user.id} • ${item.loans.length} buku</div>
+                    </div>
+                  </div>
+                  <div class="space-y-2 pl-2 border-l-2 border-purple-100">
+                    ${item.loans.map(loan => `
+                      <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-700">${loan.bookTitle}</span>
+                        <span class="text-xs text-gray-500">s/d ${loan.dueDate}</span>
+                      </div>
+                    `).join('')}
+                  </div>
                 </div>
-                <div class="text-right">
-                  <p class="text-sm font-medium ${loan.status === 'overdue' ? 'text-red-600' : 'text-gray-600'}">Kembali: ${loan.dueDate}</p>
-                  ${loan.status === 'overdue' ? '<span class="text-xs text-red-600 bg-red-50 px-2 py-0.5 rounded-full">Terlambat!</span>' : ''}
-                </div>
-              </div>
-            `).join('')}</div>` : `<div class="text-center py-8"><span class="material-icons text-4xl text-gray-300 mb-2">library_books</span><p class="text-gray-500">Tidak ada peminjaman aktif</p><a href="#catalog" class="text-indigo-600 text-sm font-medium hover:text-indigo-800 mt-2 inline-block">Cari buku untuk dipinjam →</a></div>`}
-          </div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm">
-          <div class="p-5 border-b border-gray-100"><h2 class="font-semibold text-gray-800 flex items-center"><span class="material-icons text-sm mr-2 text-green-600">history</span> Riwayat Peminjaman</h2></div>
-          <div class="p-5">
-            ${returnedLoans.length > 0 ? `<div class="space-y-3">${returnedLoans.map(loan => `
-              <div class="flex items-center justify-between p-3 border border-gray-100 rounded-xl">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center"><span class="material-icons text-green-600 text-sm">check</span></div>
-                  <div><p class="font-medium text-gray-800 text-sm">${loan.bookTitle}</p><p class="text-xs text-gray-500">${loan.borrowDate} - ${loan.returnDate}</p></div>
-                </div>
-                <span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full font-medium">Selesai</span>
-              </div>
-            `).join('')}</div>` : `<div class="text-center py-8"><span class="material-icons text-4xl text-gray-300 mb-2">history</span><p class="text-gray-500">Belum ada riwayat peminjaman</p></div>`}
+              `).join('') : '<p class="text-gray-500 text-sm text-center py-8">Tidak ada peminjam aktif</p>'}
+            </div>
           </div>
         </div>
       `;
+    }
+
+    // ==========================================
+    // ADMIN ADD BOOK
+    // ==========================================
+
+    function openCloudinaryWidget() {
+      if (typeof cloudinary !== 'undefined' && typeof CLOUDINARY_CLOUD_NAME !== 'undefined') {
+        cloudinary.openUploadWidget({ cloudName: CLOUDINARY_CLOUD_NAME, uploadPreset: CLOUDINARY_UPLOAD_PRESET, sources: ['local', 'url'], maxFiles: 1 }, (error, result) => {
+          if (!error && result && result.event === 'success') {
+            document.getElementById('add-cover-url').value = result.info.secure_url;
+            document.getElementById('book-cover-preview').innerHTML = `<img src="${result.info.secure_url}" class="w-full h-full object-cover">`;
+          }
+        });
+      } else {
+        const placeholders = ['https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop', 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop'];
+        const url = placeholders[Math.floor(Math.random() * placeholders.length)];
+        document.getElementById('add-cover-url').value = url;
+        document.getElementById('book-cover-preview').innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
+        alert('Mode demo: Cloudinary belum dikonfigurasi. Menggunakan placeholder.');
+      }
+    }
+
+    async function fetchOpenLibrary() {
+      const isbn = document.getElementById('add-isbn').value.trim().replace(/[-\s]/g, '');
+      const btn = document.getElementById('btn-openlibrary');
+      const btnIcon = document.getElementById('icon-openlibrary');
+      const btnText = document.getElementById('text-openlibrary');
+      if (!isbn) { showOpenLibraryStatus('error', 'Masukkan ISBN terlebih dahulu'); return; }
+      btn.disabled = true; btnIcon.textContent = 'hourglass_empty'; btnIcon.classList.add('animate-spin'); btnText.textContent = 'Mengambil...';
+      showOpenLibraryStatus('loading', 'Mengambil data dari OpenLibrary...');
+      try {
+        const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+        const data = await response.json();
+        const bookData = data[`ISBN:${isbn}`];
+        if (!bookData) throw new Error('Buku tidak ditemukan');
+        const title = bookData.title || '';
+        const author = bookData.authors ? bookData.authors.map(a => a.name).join(', ') : '';
+        const publisher = bookData.publishers ? bookData.publishers[0].name : '';
+        const year = bookData.publish_date ? parseInt(bookData.publish_date) : '';
+        let coverUrl = bookData.cover?.large || `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+        if (title && !document.getElementById('add-title').value) document.getElementById('add-title').value = title;
+        if (author && !document.getElementById('add-author').value) document.getElementById('add-author').value = author;
+        if (publisher && !document.getElementById('add-publisher').value) document.getElementById('add-publisher').value = publisher;
+        if (year && !document.getElementById('add-year').value) document.getElementById('add-year').value = year;
+        if (coverUrl && !document.getElementById('add-cover-url').value) {
+          document.getElementById('add-cover-url').value = coverUrl;
+          document.getElementById('book-cover-preview').innerHTML = `<img src="${coverUrl}" class="w-full h-full object-cover">`;
+        }
+        showOpenLibraryStatus('success', '✓ Data berhasil diambil dari OpenLibrary');
+      } catch (error) {
+        showOpenLibraryStatus('error', 'Gagal: ' + error.message);
+      } finally {
+        btn.disabled = false; btnIcon.classList.remove('animate-spin'); btnIcon.textContent = 'auto_fix_high'; btnText.textContent = 'Ambil Data';
+      }
+    }
+
+    function showOpenLibraryStatus(type, message) {
+      const el = document.getElementById('openlibrary-status');
+      el.classList.remove('hidden');
+      const styles = { success: 'bg-green-50 border-green-200 text-green-700', error: 'bg-red-50 border-red-200 text-red-700', loading: 'bg-blue-50 border-blue-200 text-blue-700' };
+      el.className = `mt-2 p-3 rounded-lg border text-sm flex items-start ${styles[type]}`;
+      el.innerHTML = `<span class="material-icons text-sm mr-2 ${type === 'loading' ? 'animate-spin' : ''}">${type === 'loading' ? 'hourglass_empty' : type === 'success' ? 'check_circle' : 'error'}</span><span>${message}</span>`;
+      if (type !== 'loading') setTimeout(() => el.classList.add('hidden'), 8000);
+    }
+
+    function handleAddBook(e) {
+      e.preventDefault();
+      const coverUrl = document.getElementById('add-cover-url').value || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop';
+      const copies = parseInt(document.getElementById('add-copies').value);
+      const newBook = {
+        id: 'BK' + Date.now(), title: document.getElementById('add-title').value,
+        author: document.getElementById('add-author').value, isbn: document.getElementById('add-isbn').value,
+        publisher: document.getElementById('add-publisher').value, year: parseInt(document.getElementById('add-year').value),
+        category: document.getElementById('add-category').value, description: document.getElementById('add-description').value,
+        coverUrl, totalCopies: copies, availableCopies: copies,
+        location: document.getElementById('add-location').value, addedDate: new Date().toISOString().split('T')[0]
+      };
+      books.push(newBook); saveBooks();
+      alert('Buku "' + newBook.title + '" berhasil ditambahkan!');
+      navigate('admin');
     }
 
     // ==========================================
