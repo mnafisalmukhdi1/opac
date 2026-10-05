@@ -242,6 +242,58 @@ GET https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data
 
 ---
 
+## 📄 Halaman-halaman Aplikasi
+
+### Halaman Publik (Tanpa Login)
+
+| Hash | Halaman | Deskripsi |
+|------|---------|-----------|
+| `#home` | Beranda | Halaman utama dengan pencarian dan katalog |
+| `#catalog` | Katalog | Daftar semua buku dengan filter & pencarian |
+| `#book?id=X` | Detail Buku | Informasi lengkap sebuah buku |
+| `#login` | Login | Masuk ke akun |
+| `#register` | Daftar | Pendaftaran anggota baru |
+| `#setup` | Setup Admin | Halaman setup admin pertama (muncul otomatis jika belum ada admin) |
+
+### Halaman Anggota (Perlu Login)
+
+| Hash | Halaman | Deskripsi |
+|------|---------|-----------|
+| `#profile` | Profil Saya | Informasi akun, statistik peminjaman, akses cepat |
+| `#my-books` | Buku Saya | Daftar buku yang sedang dipinjam & riwayat |
+
+### Halaman Admin (Perlu Role Admin)
+
+| Hash | Halaman | Deskripsi |
+|------|---------|-----------|
+| `#admin` | Dashboard | Statistik perpustakaan, aksi cepat, peminjaman terbaru |
+| `#admin-add` | Tambah Buku | Form tambah buku baru (dengan OpenLibrary API) |
+| `#admin-loans` | Kelola Peminjaman | Daftar semua peminjaman, proses pengembalian |
+| `#admin-borrowers` | Daftar Peminjam | Lihat siapa meminjam buku apa (grouped by book & user) |
+
+### Fitur Halaman Baru
+
+#### 📋 Halaman Profil (`#profile`)
+- Menampilkan informasi akun (nama, email, role, tanggal bergabung, user ID)
+- Statistik peminjaman untuk anggota (sedang dipinjam, dikembalikan, total)
+- Quick access ke fitur admin (untuk role admin)
+- Quick access ke "Buku Saya" (untuk role member)
+
+#### 📚 Halaman Buku Saya (`#my-books`)
+- Daftar buku yang sedang aktif dipinjam
+- Informasi jatuh tempo & peringatan terlambat
+- Cover buku untuk visualisasi
+- Link ke detail buku
+- Riwayat peminjaman yang sudah dikembalikan
+
+#### 👥 Halaman Daftar Peminjam (`#admin-borrowers`)
+- **View per Buku**: Lihat buku mana yang sedang dipinjam dan siapa peminjamnya
+- **View per User**: Lihat seorang anggota meminjam buku apa saja
+- Informasi jatuh tempo & status terlambat
+- Jumlah eksemplar yang dipinjam dari total
+
+---
+
 ## 📁 Struktur Data
 
 ### Book (Buku)
@@ -285,17 +337,63 @@ GET https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data
 
 ---
 
-## 🔑 Akun Demo
+## 🔑 Akun & Autentikasi
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | `admin@perpustakaan.id` | `admin123` |
-| Anggota | Daftar baru via halaman Register | - |
+### ⚠️ PENTING: Tidak Ada Akun Hardcoded
 
-> ⚠️ **Ganti password admin** sebelum publish ke production! Cari baris berikut di `index.html`:
-> ```javascript
-> if (email === 'admin@perpustakaan.id' && password === 'admin123') {
-> ```
+Sistem ini **TIDAK memiliki akun admin default** yang terlihat di source code. Admin pertama dibuat melalui **Setup Wizard** yang muncul saat pertama kali aplikasi dijalankan.
+
+### Setup Admin Pertama
+
+1. Buka aplikasi untuk pertama kali
+2. Halaman **"Setup Admin Pertama"** akan otomatis muncul
+3. Isi form dengan:
+   - Nama lengkap admin
+   - Email (bebas, tidak harus @perpustakaan.id)
+   - Password (minimal 8 karakter)
+   - Konfirmasi password
+4. Klik **"Buat Admin"**
+5. Admin pertama berhasil dibuat dan langsung login
+
+> 💡 **Simpan kredensial ini dengan baik!** Anda tidak bisa membuat admin kedua dari halaman setup. Admin pertama bisa mengelola admin lain dari dashboard (fitur future).
+
+### Sistem Autentikasi
+
+Sistem menggunakan **dua mode** autentikasi:
+
+#### Mode 1: Firebase Auth (Recommended untuk Production)
+- Password disimpan aman di Firebase
+- Tidak ada password di client-side
+- Support multi-device login
+- **Cara aktivasi:** Uncomment konfigurasi Firebase di `index.html` dan set `USE_FIREBASE = true`
+
+#### Mode 2: localStorage (Default untuk Demo)
+- Password di-hash dengan **SHA-256** sebelum disimpan
+- Hash tidak bisa di-reverse ke password asli
+- Data tersimpan di browser (per-device)
+- **Keamanan:** Cukup untuk demo/internal use, tidak untuk production publik
+
+### Cara Login
+
+| Role | Cara |
+|------|------|
+| Admin | Login dengan email & password yang dibuat saat setup |
+| Anggota | Daftar baru via halaman Register, lalu login |
+
+### Keamanan Password
+
+```javascript
+// Password di-hash dengan SHA-256 sebelum disimpan
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+```
+
+> ⚠️ **Untuk production**, SELALU gunakan Firebase Auth atau backend authentication yang proper. localStorage + hash hanya untuk demo/prototype.
 
 ---
 
@@ -313,13 +411,24 @@ GET https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data
 
 ## 📝 Catatan Penting Sebelum Publish
 
-1. ✅ **Ganti konfigurasi Firebase** dengan proyek Anda sendiri
-2. ✅ **Ganti konfigurasi Cloudinary** dengan akun Anda sendiri
-3. ✅ **Ganti password admin** default
-4. ✅ **Atur Firestore Security Rules** dengan benar
-5. ✅ **Ganti data dummy** (buku, kontak, alamat) dengan data sesungguhnya
-6. ✅ **Update metadata** (title, deskripsi) di tag `<head>`
-7. ✅ **Test semua fitur** sebelum publish
+1. ✅ **Buat admin pertama** via Setup Wizard (jangan share kredensial)
+2. ✅ **Aktifkan Firebase Auth** untuk production (uncomment config & set `USE_FIREBASE = true`)
+3. ✅ **Ganti konfigurasi Firebase** dengan proyek Anda sendiri
+4. ✅ **Ganti konfigurasi Cloudinary** dengan akun Anda sendiri
+5. ✅ **Atur Firestore Security Rules** dengan benar (lihat bagian Firebase)
+6. ✅ **Ganti data dummy** (buku, kontak, alamat) dengan data sesungguhnya
+7. ✅ **Update metadata** (title, deskripsi) di tag `<head>`
+8. ✅ **Test semua fitur** sebelum publish:
+   - Setup admin pertama
+   - Login/logout
+   - Register anggota baru
+   - Tambah buku (dengan OpenLibrary API)
+   - Pinjam buku (sebagai anggota)
+   - Kelola peminjaman (sebagai admin)
+   - Lihat profil & buku saya
+   - Lihat daftar peminjam (admin)
+9. ✅ **Hapus data localStorage** di browser sebelum deploy untuk reset state
+10. ✅ **Backup kredensial admin** di tempat aman (password manager)
 
 ---
 
