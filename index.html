@@ -405,7 +405,18 @@
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
-                <input type="text" id="add-isbn" placeholder="978-xxx-xxx-xxx" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <div class="flex gap-2">
+                  <input type="text" id="add-isbn" placeholder="978-xxx-xxx-xxx" class="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <button type="button" onclick="fetchOpenLibrary()" id="btn-openlibrary" class="inline-flex items-center px-4 py-3 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-colors font-medium text-sm whitespace-nowrap">
+                    <span class="material-icons text-sm mr-1" id="icon-openlibrary">auto_fix_high</span>
+                    <span id="text-openlibrary">Ambil Data</span>
+                  </button>
+                </div>
+                <p class="text-xs text-gray-500 mt-1 flex items-center">
+                  <span class="material-icons text-xs mr-1">info</span>
+                  Isi ISBN lalu klik "Ambil Data" untuk auto-fill dari OpenLibrary
+                </p>
+                <div id="openlibrary-status" class="hidden mt-2"></div>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Penerbit *</label>
@@ -1160,6 +1171,178 @@
           </div>
         </div>
       `;
+    }
+
+    // ==========================================
+    // OPENLIBRARY API INTEGRATION
+    // ==========================================
+
+    async function fetchOpenLibrary() {
+      const isbnInput = document.getElementById('add-isbn');
+      const isbn = isbnInput.value.trim().replace(/[-\s]/g, ''); // Hapus dash & spasi
+      const statusEl = document.getElementById('openlibrary-status');
+      const btn = document.getElementById('btn-openlibrary');
+      const btnIcon = document.getElementById('icon-openlibrary');
+      const btnText = document.getElementById('text-openlibrary');
+
+      if (!isbn) {
+        showOpenLibraryStatus('error', 'Masukkan ISBN terlebih dahulu');
+        return;
+      }
+
+      // Set loading state
+      btn.disabled = true;
+      btn.classList.add('opacity-60', 'cursor-not-allowed');
+      btnIcon.textContent = 'hourglass_empty';
+      btnIcon.classList.add('animate-spin');
+      btnText.textContent = 'Mengambil...';
+      showOpenLibraryStatus('loading', 'Mengambil data dari OpenLibrary...');
+
+      try {
+        const url = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const bookKey = `ISBN:${isbn}`;
+        const bookData = data[bookKey];
+
+        if (!bookData) {
+          throw new Error('Buku tidak ditemukan di OpenLibrary');
+        }
+
+        // Extract data
+        const title = bookData.title || '';
+        const author = bookData.authors && bookData.authors.length > 0
+          ? bookData.authors.map(a => a.name).join(', ')
+          : '';
+        const publisher = bookData.publishers && bookData.publishers.length > 0
+          ? bookData.publishers[0].name
+          : '';
+        const year = bookData.publish_date ? parseInt(bookData.publish_date) : '';
+        const pages = bookData.number_of_pages || '';
+
+        // Build description from subjects
+        let description = '';
+        if (bookData.subjects && bookData.subjects.length > 0) {
+          const subjectNames = bookData.subjects
+            .map(s => s.name)
+            .filter(n => !/^\d{4}/.test(n) && !/^\d+-\d+$/.test(n))
+            .slice(0, 5);
+          if (subjectNames.length > 0) {
+            description = 'Topik: ' + subjectNames.join(', ') + '.';
+          }
+        }
+
+        // Cover image - try multiple sources
+        let coverUrl = '';
+        // 1. Try cover from OpenLibrary covers API
+        if (bookData.cover && bookData.cover.large) {
+          coverUrl = bookData.cover.large;
+        } else {
+          // 2. Fallback: construct from ISBN
+          coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+        }
+
+        // Fill form fields
+        if (title && !document.getElementById('add-title').value) {
+          document.getElementById('add-title').value = title;
+        }
+        if (author && !document.getElementById('add-author').value) {
+          document.getElementById('add-author').value = author;
+        }
+        if (publisher && !document.getElementById('add-publisher').value) {
+          document.getElementById('add-publisher').value = publisher;
+        }
+        if (year && !document.getElementById('add-year').value) {
+          document.getElementById('add-year').value = year;
+        }
+        if (description && !document.getElementById('add-description').value) {
+          document.getElementById('add-description').value = description;
+        }
+        if (coverUrl && !document.getElementById('add-cover-url').value) {
+          document.getElementById('add-cover-url').value = coverUrl;
+          document.getElementById('book-cover-preview').innerHTML =
+            `<img src="${coverUrl}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\\'material-icons text-gray-400\\'>image</span>'">`;
+        }
+
+        // Auto-detect category from subjects
+        if (bookData.subjects && bookData.subjects.length > 0) {
+          const subjectText = bookData.subjects.map(s => s.name.toLowerCase()).join(' ');
+          let detectedCategory = 'Novel'; // default
+          if (/fiction|novel|story/.test(subjectText)) detectedCategory = 'Novel';
+          else if (/self-help|self help|psychology|motivation/.test(subjectText)) detectedCategory = 'Self-Help';
+          else if (/history|sejarah|histor/.test(subjectText)) detectedCategory = 'Sejarah';
+          else if (/technology|computer|programming|software/.test(subjectText)) detectedCategory = 'Teknologi';
+          else if (/education|teaching|learning|school/.test(subjectText)) detectedCategory = 'Pendidikan';
+          else if (/science|biology|physics|chemistry|math/.test(subjectText)) detectedCategory = 'Sains';
+          else if (/religion|islam|christian|bible|quran|faith/.test(subjectText)) detectedCategory = 'Agama';
+
+          const categorySelect = document.getElementById('add-category');
+          // Only set if category exists in options
+          const options = Array.from(categorySelect.options).map(o => o.value);
+          if (options.includes(detectedCategory)) {
+            categorySelect.value = detectedCategory;
+          }
+        }
+
+        // Show success
+        const filledFields = [];
+        if (title) filledFields.push('judul');
+        if (author) filledFields.push('penulis');
+        if (publisher) filledFields.push('penerbit');
+        if (year) filledFields.push('tahun');
+        if (coverUrl) filledFields.push('sampul');
+
+        showOpenLibraryStatus('success',
+          `✓ Data berhasil diambil! Field terisi: ${filledFields.join(', ') || 'tidak ada field baru'}${pages ? ` • ${pages} halaman` : ''}`
+        );
+
+      } catch (error) {
+        console.error('OpenLibrary fetch error:', error);
+        showOpenLibraryStatus('error',
+          `Gagal mengambil data: ${error.message}. Pastikan ISBN valid dan coba lagi.`
+        );
+      } finally {
+        // Reset button state
+        btn.disabled = false;
+        btn.classList.remove('opacity-60', 'cursor-not-allowed');
+        btnIcon.classList.remove('animate-spin');
+        btnIcon.textContent = 'auto_fix_high';
+        btnText.textContent = 'Ambil Data';
+      }
+    }
+
+    function showOpenLibraryStatus(type, message) {
+      const statusEl = document.getElementById('openlibrary-status');
+      statusEl.classList.remove('hidden');
+
+      const styles = {
+        success: 'bg-green-50 border-green-200 text-green-700',
+        error: 'bg-red-50 border-green-200 text-red-700',
+        loading: 'bg-blue-50 border-blue-200 text-blue-700'
+      };
+      const icons = {
+        success: 'check_circle',
+        error: 'error',
+        loading: 'hourglass_empty'
+      };
+
+      statusEl.className = `mt-2 p-3 rounded-lg border text-sm flex items-start ${styles[type]}`;
+      statusEl.innerHTML = `
+        <span class="material-icons text-sm mr-2 ${type === 'loading' ? 'animate-spin' : ''}">${icons[type]}</span>
+        <span>${message}</span>
+      `;
+
+      // Auto-hide after 8 seconds for success/error
+      if (type !== 'loading') {
+        setTimeout(() => {
+          statusEl.classList.add('hidden');
+        }, 8000);
+      }
     }
 
     // ==========================================

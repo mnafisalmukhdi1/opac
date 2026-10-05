@@ -18,6 +18,7 @@ Sistem **Open Public Access Catalog (OPAC)** berbasis HTML murni, TailwindCSS, d
 - 👨‍💼 **Dashboard Admin** — Statistik, kelola buku, kelola peminjaman
 - 👤 **Dashboard Anggota** — Riwayat peminjaman pribadi
 - 🖼️ **Upload Sampul** — Integrasi Cloudinary untuk upload gambar
+- 📚 **Auto-fill dari OpenLibrary** — Isi data buku otomatis dari ISBN via [OpenLibrary API](https://openlibrary.org/developers/api)
 - 🔥 **Firebase Ready** — Siap pakai Firebase Auth & Firestore
 - 📱 **Responsive** — Tampilan optimal di desktop & mobile
 - 🚀 **Single File** — Semua dalam satu file `index.html`
@@ -177,6 +178,67 @@ const CLOUDINARY_UPLOAD_PRESET = 'opac_books';  // Ganti dengan Upload Preset An
 > - Set **folder** di upload preset agar file masuk ke folder tertentu
 > - Gunakan **Cloudinary Admin API** untuk membersihkan file yang tidak diinginkan
 > - Monitor penggunaan di dashboard Cloudinary
+
+---
+
+## 📚 Auto-fill dari OpenLibrary
+
+Fitur ini memungkinkan admin mengisi data buku secara otomatis hanya dengan memasukkan **ISBN**. Data akan diambil dari [OpenLibrary API](https://openlibrary.org/developers/api) — database buku terbuka yang dikelola oleh Internet Archive.
+
+### Cara Penggunaan
+
+1. Login sebagai **Admin**
+2. Buka halaman **Tambah Buku** (`#admin-add`)
+3. Isi field **ISBN** dengan nomor ISBN buku (misal: `9780140328721` atau `0451526538`)
+4. Klik tombol **"Ambil Data"** (ikon ✨)
+5. Tunggu beberapa detik — sistem akan otomatis mengisi:
+   - ✅ Judul buku
+   - ✅ Nama penulis
+   - ✅ Penerbit
+   - ✅ Tahun terbit
+   - ✅ Sampul/cover buku
+   - ✅ Deskripsi (berdasarkan subjek)
+   - ✅ Kategori (auto-detect dari subjek)
+6. Admin tinggal melengkapi field lain seperti **lokasi rak** dan **jumlah eksemplar**
+
+### Endpoint API yang Digunakan
+
+```
+GET https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data
+```
+
+**Contoh Response:**
+```json
+{
+  "ISBN:0451526538": {
+    "title": "The adventures of Tom Sawyer",
+    "authors": [{ "name": "Mark Twain" }],
+    "publishers": [{ "name": "Signet Classic" }],
+    "publish_date": "1997",
+    "number_of_pages": 216,
+    "subjects": [{ "name": "..." }],
+    "cover": { "large": "https://..." }
+  }
+}
+```
+
+### Catatan Penting
+
+- **Tidak perlu API Key** — OpenLibrary API bersifat publik dan gratis
+- **Rate Limit** — OpenLibrary menerapkan rate limiting, jangan spam request
+- **Fallback Cover** — Jika cover tidak tersedia di OpenLibrary, sistem akan mencoba URL `https://covers.openlibrary.org/b/isbn/{isbn}-L.jpg`
+- **Field yang sudah diisi tidak akan ditimpa** — Jika admin sudah mengisi judul, maka data dari OpenLibrary tidak akan menimpanya
+- **Auto-detect Kategori** — Sistem akan mencoba mencocokkan subjek buku dengan kategori yang tersedia (Novel, Self-Help, Sejarah, Teknologi, Pendidikan, Sains, Agama)
+- **ISBN bisa dengan atau tanpa dash** — `978-0-14-032872-1` atau `9780140328721` sama-sama diterima
+
+### Troubleshooting
+
+| Masalah | Solusi |
+|---------|--------|
+| "Buku tidak ditemukan" | Pastikan ISBN valid (10 atau 13 digit). Cek di [OpenLibrary](https://openlibrary.org/) |
+| Cover tidak muncul | Beberapa buku lama belum memiliki cover di OpenLibrary. Upload manual via Cloudinary |
+| Request timeout | Cek koneksi internet. OpenLibrary kadang lambat di region tertentu |
+| Data tidak lengkap | OpenLibrary bergantung pada kontributor. Data mungkin tidak lengkap untuk buku Indonesia |
 
 ---
 
